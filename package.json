@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "name": "rentmuse_backend",
+  "version": "1.0.0",
+  "description": "An Api For the Rent_muse App",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepakgohil9/rentmuse_backend.git"
+  },
+  "author": "Deepak, Kedar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/deepakgohil9/rentmuse_backend/issues"
+  },
+  "homepage": "https://github.com/deepakgohil9/rentmuse_backend#readme"
+}
