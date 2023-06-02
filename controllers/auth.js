@@ -8,6 +8,7 @@ const register = async (req, res, next) => {
         let salt = await bcrypt.genSalt(10)
         req.body.password = await bcrypt.hash(req.body.password, salt)
         req.body.otp = await send_otp_mail(req.body.email)
+        req.body.is_verified = false
 
         let user = User(req.body)
         await user.save()
@@ -23,6 +24,31 @@ const register = async (req, res, next) => {
                 birth_date: user.birth_date
             }
         })
+    } catch (error) {
+        next({ status: 400, message: error })
+    }
+}
+
+const login = async (req, res, next) => {
+    try {
+        let user = await User.findOne({ email: req.body.email })
+        if (!user) {
+            next({ status: 404, message: "user not found" })
+            return
+        }
+        if (!user.is_verified) {
+            next({ status: 400, message: "please verify otp" })
+            return
+        }
+
+        let is_valid = await bcrypt.compare(req.body.password, user.password)
+        if (!is_valid) {
+            next({ status: 400, message: "invalid password" })
+            return
+        }
+
+        let token = jwt.sign({ email: user.email }, process.env.JWT)
+        res.send({ message: "login successfull", data: { access_token: token } })
     } catch (error) {
         next({ status: 400, message: error })
     }
@@ -64,10 +90,10 @@ const resend_otp = async (req, res, next) => {
         }
         user.otp = await send_otp_mail(req.body.email)
         await user.save()
-        res.send({ message: "otp verified successfully!" })
+        res.send({ message: "otp sent successfully!" })
     } catch (error) {
         next({ status: 400, message: error })
     }
 }
 
-module.exports = { register, verify_otp, resend_otp }
+module.exports = { register, login, verify_otp, resend_otp }
