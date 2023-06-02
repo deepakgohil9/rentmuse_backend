@@ -47,10 +47,27 @@ const verify_otp = async (req, res, next) => {
             })
         res.send({ message: "otp verified successfully!" })
     } catch (error) {
-        console.log(error)
         next({ status: 400, message: error })
     }
 }
 
+const resend_otp = async (req, res, next) => {
+    try {
+        let user = await User.findOne({ email: req.body.email })
+        if (!user) {
+            next({ status: 404, message: "user not found" })
+            return
+        }
+        if (user.is_verified) {
+            next({ status: 400, message: "otp is already verified" })
+            return
+        }
+        user.otp = await send_otp_mail(req.body.email)
+        await user.save()
+        res.send({ message: "otp verified successfully!" })
+    } catch (error) {
+        next({ status: 400, message: error })
+    }
+}
 
-module.exports = { register, verify_otp }
+module.exports = { register, verify_otp, resend_otp }
