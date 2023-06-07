@@ -1,21 +1,21 @@
-const nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer")
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.MAIL_ADDR,
-    pass: process.env.MAIL_PASS,
-  },
-});
+	service: "gmail",
+	auth: {
+		user: process.env.MAIL_ADDR,
+		pass: process.env.MAIL_PASS,
+	},
+})
 
 const send_otp_mail = async (email) => {
-  try {
-    let otp = Math.floor(100000 + Math.random() * 899999);
-    await transporter.sendMail({
-      from: `"Rent Muse 👻" <${process.env.MAIL_ADDR}>`,
-      to: email,
-      subject: "otp ✔",
-      html: `<div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
+	try {
+		let otp = Math.floor(100000 + Math.random() * 899999)
+		await transporter.sendMail({
+			from: `"Rent Muse 👻" <${process.env.MAIL_ADDR}>`,
+			to: email,
+			subject: "otp ✔",
+			html: `<div style="font-family: Helvetica,Arial,sans-serif;min-width:1000px;overflow:auto;line-height:2">
             <div style="margin:50px auto;width:70%;padding:20px 0">
               <div style="border-bottom:1px solid #eee">
                 <a href="" style="font-size:1.4em;color: #00466a;text-decoration:none;font-weight:600">Rent Muse</a>
@@ -33,11 +33,11 @@ const send_otp_mail = async (email) => {
               </div>
             </div>
           </div>`,
-    });
-    return otp;
-  } catch (error) {
-    throw new Error(error);
-  }
-};
+		})
+		return otp
+	} catch (error) {
+		throw new Error(error)
+	}
+}
 
-module.exports = send_otp_mail;
+module.exports = send_otp_mail
